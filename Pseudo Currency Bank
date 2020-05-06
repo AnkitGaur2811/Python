@@ -11,16 +11,23 @@ class Account:
 
     #creation of account
     def createAcc(self):
-        self.Accountno=int(input("Enter the acc number:"))
+        self.Accountno=checkAccountno()
         self.Accholdername=input("Enter the name of Account holder:")
         self.Acctype=input("Enter the type of account you need( C for current : Enter S for saving:):")
         self.Deposit=int(input("enter the amount for deposite(>= 2000 for current >=500 for savings ) :"))
         if self.Acctype=="s" or self.Acctype=="S":
             while(self.Deposit<500):
                 print ("please enter the correct amount this amount is not excepted it must be >=500" )
+                self.Deposit=int(input("enter the amount for deposite(>= 2000 for current >=500 for savings ) :"))
+                if(self.Deposit>500):
+                    break
         else:
              while(self.Deposit<2000):
                 print ("please enter the correct amount this amount is not excepted it must be >=2000" )
+                self.Deposit=int(input("enter the amount for deposite(>= 2000 for current >=500 for savings ) :"))
+                if(self.Deposit>2000):
+                    break
+        
         print("\n\t\t##congratulation! you are account is sucessfully created##")
     
     #showing created account
@@ -59,6 +66,26 @@ class Account:
     
     def getDeposit(self):
         return self.Deposit
+
+#check if account alredy exist or not
+def checkAccountno():
+    file=path.Path("Accounts.data")
+    if not file.exists():
+        Account=int(input("Enter the Accountno:"))
+        return Account
+    else:
+        while(1):
+            Account=int(input("Enter the Accountno:"))
+            filein=open("Accounts.data","rb")
+            mylist=pic.load(filein)
+            filein.close()
+            for item in mylist:
+                if  (item.getAccno()==Account):
+                    print("this account already exits plz enter again")
+                else:
+                    return Account
+                
+                    
     
 #first view of bank
 def intro():
@@ -184,7 +211,7 @@ def writeaccountinfile(account):
     outfile.close()
     os.rename("newaccounts.data","Accounts.data")
     
-#__________________________________________________________________________#
+#__________________________________main________________________________________#
 
 ch=""
 num=0
